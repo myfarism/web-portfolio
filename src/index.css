@@ -4,6 +4,16 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --terminal-bg: #0a0e27;
+  --terminal-text: #e4e4e7;
+  --terminal-accent: #f59e0b;
+  --terminal-secondary: #8b5cf6;
+  --terminal-success: #10b981;
+  --terminal-error: #ef4444;
+  --glow-effect: none;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -12,29 +22,36 @@
 
 body {
   font-family: 'JetBrains Mono', monospace;
-  background: #0a0e27;
-  color: #e4e4e7;
+  background: var(--terminal-bg);
+  color: var(--terminal-text);
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 ::selection {
-  background: #f59e0b;
-  color: #0a0e27;
+  background: var(--terminal-accent);
+  color: var(--terminal-bg);
 }
 
+/* Glow effect for retro themes */
+.glow-text {
+  text-shadow: var(--glow-effect);
+}
+
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0e27;
+  background: var(--terminal-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #f59e0b;
+  background: var(--terminal-accent);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #d97706;
+  opacity: 0.8;
 }

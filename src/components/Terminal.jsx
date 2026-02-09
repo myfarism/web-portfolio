@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useTheme } from '../contexts/ThemeContext';
 
 const Terminal = () => {
   const [input, setInput] = useState('');
@@ -10,6 +11,7 @@ const Terminal = () => {
   const [isMobile, setIsMobile] = useState(false);
   const inputRef = useRef(null);
   const terminalRef = useRef(null);
+  const { currentTheme, changeTheme, themes } = useTheme();
 
   // Detect mobile
   useEffect(() => {
@@ -135,6 +137,46 @@ const Terminal = () => {
       ],
       type: 'info'
     }),
+    theme: (args) => {
+      const themeName = args?.[0];
+      
+      if (!themeName) {
+        return {
+          output: [
+            'Available themes:',
+            ...Object.entries(themes).map(([key, theme]) => 
+              `  ${key.padEnd(12)} - ${theme.name} ${currentTheme === key ? '(active)' : ''}`
+            ),
+            '',
+            'Usage: theme <name>',
+            'Example: theme retro'
+          ],
+          type: 'info'
+        };
+      }
+      
+      if (themes[themeName]) {
+        changeTheme(themeName);
+        return {
+          output: [
+            `Switching to ${themes[themeName].name} theme...`,
+            '[████████████████████] 100%',
+            `✓ Theme changed to ${themes[themeName].name}!`,
+            '',
+            'Enjoying the new look? Try other themes!'
+          ],
+          type: 'success'
+        };
+      } else {
+        return {
+          output: [
+            `Theme "${themeName}" not found.`,
+            'Type "theme" to see available themes.'
+          ],
+          type: 'error'
+        };
+      }
+    },
     email: () => {
       const email = 'your.email@example.com';
       navigator.clipboard.writeText(email);
@@ -187,7 +229,9 @@ const Terminal = () => {
   }, [isMobile]);
 
   const handleCommand = (cmd) => {
-    const trimmedCmd = cmd.trim().toLowerCase();
+    const parts = cmd.trim().split(' ');
+    const trimmedCmd = parts[0].toLowerCase();
+    const args = parts.slice(1);
     
     if (!trimmedCmd) return;
 
@@ -197,7 +241,7 @@ const Terminal = () => {
     ];
 
     if (commands[trimmedCmd]) {
-      const result = commands[trimmedCmd]();
+      const result = commands[trimmedCmd](args);
       
       if (result.type === 'clear') {
         setHistory([]);

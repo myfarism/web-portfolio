@@ -8,12 +8,12 @@ export default {
     extend: {
       colors: {
         terminal: {
-          bg: '#0a0e27',
-          text: '#e4e4e7',
-          accent: '#f59e0b',
-          secondary: '#8b5cf6',
-          success: '#10b981',
-          error: '#ef4444',
+          bg: 'var(--terminal-bg)',
+          text: 'var(--terminal-text)',
+          accent: 'var(--terminal-accent)',
+          secondary: 'var(--terminal-secondary)',
+          success: 'var(--terminal-success)',
+          error: 'var(--terminal-error)',
         }
       },
       fontFamily: {
@@ -23,6 +23,7 @@ export default {
         'cursor-blink': 'blink 1.2s step-end infinite',
         'glitch': 'glitch 0.3s cubic-bezier(.25, .46, .45, .94) both',
         'slide-up': 'slideUp 0.5s ease-out',
+        'glow': 'glow 2s ease-in-out infinite alternate',
       },
       keyframes: {
         blink: {
@@ -40,6 +41,10 @@ export default {
         slideUp: {
           '0%': { transform: 'translateY(20px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        glow: {
+          '0%': { textShadow: '0 0 10px var(--terminal-accent), 0 0 20px var(--terminal-accent)' },
+          '100%': { textShadow: '0 0 20px var(--terminal-accent), 0 0 30px var(--terminal-accent)' },
         }
       }
     },
