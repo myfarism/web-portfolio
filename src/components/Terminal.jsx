@@ -11,7 +11,7 @@ const Terminal = () => {
   const [isMobile, setIsMobile] = useState(false);
   const inputRef = useRef(null);
   const terminalRef = useRef(null);
-  const { currentTheme, changeTheme, themes } = useTheme();
+  const { currentTheme, changeTheme, themes, getThemesByCategory } = useTheme();
 
   // Detect mobile
   useEffect(() => {
@@ -60,19 +60,36 @@ const Terminal = () => {
   };
 
   const commands = {
+    // Update help command
     help: () => ({
       output: [
         'Available commands:',
-        '  about     - Learn about me',
-        '  projects  - View my work',
-        '  skills    - See skills',
-        '  contact   - Get in touch',
-        '  clear     - Clear terminal',
-        '  whoami    - Quick intro',
-        '  ls        - List sections',
-        '  email     - Copy email',
         '',
-        '💡 Try: "sudo" or "coffee"'
+        '📂 Navigation:',
+        '  about        - Learn about me',
+        '  projects     - View my work',
+        '  skills       - See what I can do',
+        '  contact      - Get in touch',
+        '',
+        '🎨 Themes:',
+        '  theme        - List all themes',
+        '  theme <name> - Change theme',
+        '  theme-random - Random theme',
+        '  theme-preview <name> - Preview colors',
+        '',
+        '🛠️ System:',
+        '  whoami       - Quick intro',
+        '  ls           - List sections',
+        '  clear        - Clear terminal',
+        '  email        - Copy my email',
+        '',
+        '🎮 Fun:',
+        '  coffee       - Brew coffee ☕',
+        '  sudo         - Be admin 😏',
+        '  matrix       - Wake up, Neo',
+        '  hack         - Try to hack',
+        '',
+        '💡 Try typing "theme" to see 25+ themes!'
       ],
       type: 'info'
     }),
@@ -141,41 +158,104 @@ const Terminal = () => {
       const themeName = args?.[0];
       
       if (!themeName) {
+        const categories = getThemesByCategory();
+        const output = ['Available themes:'];
+        
+        Object.entries(categories).forEach(([category, themeList]) => {
+          output.push('');
+          output.push(`╔═══ ${category} ═══╗`);
+          themeList.forEach(theme => {
+            const active = currentTheme === theme.key ? ' ← active' : '';
+            const glow = theme.glow ? ' ✨' : '';
+            output.push(`  ${theme.key.padEnd(20)} ${theme.name}${glow}${active}`);
+          });
+        });
+        
+        output.push('');
+        output.push('Usage: theme <name>');
+        output.push('Example: theme catppuccin-mocha');
+        
         return {
-          output: [
-            'Available themes:',
-            ...Object.entries(themes).map(([key, theme]) => 
-              `  ${key.padEnd(12)} - ${theme.name} ${currentTheme === key ? '(active)' : ''}`
-            ),
-            '',
-            'Usage: theme <name>',
-            'Example: theme retro'
-          ],
+          output,
           type: 'info'
         };
       }
       
       if (themes[themeName]) {
         changeTheme(themeName);
+        const theme = themes[themeName];
         return {
           output: [
-            `Switching to ${themes[themeName].name} theme...`,
+            `Switching to ${theme.name}...`,
             '[████████████████████] 100%',
-            `✓ Theme changed to ${themes[themeName].name}!`,
+            `✓ Theme changed to ${theme.name}!`,
+            theme.glow ? '✨ Glow effects enabled!' : '',
             '',
-            'Enjoying the new look? Try other themes!'
-          ],
+            'Try exploring other themes!'
+          ].filter(Boolean),
           type: 'success'
         };
       } else {
         return {
           output: [
             `Theme "${themeName}" not found.`,
-            'Type "theme" to see available themes.'
+            'Type "theme" to see all available themes.'
           ],
           type: 'error'
         };
       }
+    },
+
+    // Add random theme command for fun
+    'theme-random': () => {
+      const themeKeys = Object.keys(themes);
+      const randomTheme = themeKeys[Math.floor(Math.random() * themeKeys.length)];
+      changeTheme(randomTheme);
+      return {
+        output: [
+          'Rolling the dice...',
+          '🎲 Random theme selected!',
+          `✓ Now using: ${themes[randomTheme].name}`,
+          '',
+          `Don't like it? Try "theme-random" again!`
+        ],
+        type: 'success'
+      };
+    },
+
+    // Add theme preview
+    'theme-preview': (args) => {
+      const themeName = args?.[0];
+      
+      if (!themeName || !themes[themeName]) {
+        return {
+          output: [
+            'Usage: theme-preview <name>',
+            'Example: theme-preview dracula',
+            '',
+            'This shows you the colors without changing theme.'
+          ],
+          type: 'info'
+        };
+      }
+      
+      const theme = themes[themeName];
+      return {
+        output: [
+          `Preview: ${theme.name}`,
+          '═══════════════════════',
+          `Background:  ${theme.bg}`,
+          `Text:        ${theme.text}`,
+          `Accent:      ${theme.accent}`,
+          `Secondary:   ${theme.secondary}`,
+          `Success:     ${theme.success}`,
+          `Error:       ${theme.error}`,
+          `Glow Effect: ${theme.glow ? 'Yes ✨' : 'No'}`,
+          '',
+          `To apply: theme ${themeName}`
+        ],
+        type: 'info'
+      };
     },
     email: () => {
       const email = 'your.email@example.com';

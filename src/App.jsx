@@ -7,6 +7,7 @@ import About from './components/About';
 import Projects from './components/Projects';
 import Skills from './components/Skills';
 import Contact from './components/Contact';
+import ThemeSwitcher from './components/ThemeSwitcher';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -52,6 +53,9 @@ function App() {
           </button>
 
           <MobileMenu isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
+
+          {/* Theme Switcher Button */}
+          <ThemeSwitcher />
 
           <Hero />
           <About />
