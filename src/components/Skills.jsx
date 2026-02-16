@@ -26,9 +26,9 @@ const Skills = () => {
       icon: Smartphone,
       color: 'success',
       skills: [
-        { name: 'Kotlin', level: 90 },
-        { name: 'Jetpack Compose', level: 85 },
-        { name: 'Android SDK', level: 85 },
+        { name: 'Kotlin', level: 85 },
+        { name: 'Jetpack Compose', level: 75 },
+        { name: 'Android SDK', level: 80 },
         { name: 'Room DB', level: 80 },
         { name: 'Coroutines', level: 75 },
       ]
@@ -39,9 +39,9 @@ const Skills = () => {
       color: 'secondary',
       skills: [
         { name: 'JavaScript', level: 85 },
-        { name: 'Kotlin', level: 90 },
-        { name: 'Python', level: 75 },
-        { name: 'C++', level: 65 },
+        { name: 'Kotlin', level: 85 },
+        { name: 'Python', level: 85 },
+        { name: 'C++', level: 70 },
         { name: 'SQL', level: 80 },
       ]
     },
@@ -62,10 +62,10 @@ const Skills = () => {
       icon: Code,
       color: 'secondary',
       skills: [
-        { name: 'React', level: 75 },
-        { name: 'Tailwind CSS', level: 80 },
-        { name: 'Material Design', level: 85 },
-        { name: 'Responsive Design', level: 85 },
+        { name: 'React', level: 70 },
+        { name: 'Tailwind CSS', level: 70 },
+        { name: 'Material Design', level: 70 },
+        { name: 'Responsive Design', level: 65 },
       ]
     },
     {
@@ -94,6 +94,16 @@ const Skills = () => {
 
   const certifications = [
     {
+      name: 'English Score 412 - B2 Proficiency',
+      issuer: 'British Council',
+      year: '2025'
+    },
+    {
+      name: 'Bangkit Academy - Android Path Graduate',
+      issuer: 'Google, GoTo, Traveloka',
+      year: '2024'
+    },
+    {
       name: 'Android Application Development - Intermediate',
       issuer: 'Dicoding Indonesia',
       year: '2024'
@@ -102,11 +112,6 @@ const Skills = () => {
       name: 'Building Android Apps with Jetpack Compose',
       issuer: 'Dicoding Indonesia',
       year: '2024'
-    },
-    {
-      name: 'Bangkit Academy - Android Path Graduate',
-      issuer: 'Google, GoTo, Traveloka',
-      year: '2025'
     }
   ];
 

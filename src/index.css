@@ -28,6 +28,29 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Grid Animation - Using Tailwind */
+@keyframes grid-move {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 40px 40px;
+  }
+}
+
+@keyframes grid-pulse {
+  0%, 100% {
+    opacity: 0.12;
+  }
+  50% {
+    opacity: 0.18;
+  }
+}
+
+.animate-grid-move {
+  animation: grid-move 30s linear infinite, grid-pulse 8s ease-in-out infinite;
+}
+
 ::selection {
   background: var(--terminal-accent);
   color: var(--terminal-bg);
@@ -54,4 +77,15 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   opacity: 0.8;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .animate-grid-move {
+    animation: none !important;
+  }
 }

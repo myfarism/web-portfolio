@@ -1,75 +1,102 @@
 import { motion } from 'motion/react';
+import { Mail, Github, Linkedin, Phone, MapPin, Clock, MessageSquare, Copy, Check, Instagram } from 'lucide-react';
 import { useState } from 'react';
-import { Mail, Send, Github, Linkedin, Phone, MapPin, Clock } from 'lucide-react';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
-  const [formStatus, setFormStatus] = useState('idle');
+  const [copiedItem, setCopiedItem] = useState(null);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setFormStatus('sending');
-    
-    // Simulate sending
-    setTimeout(() => {
-      setFormStatus('success');
-      setFormData({ name: '', email: '', message: '' });
-      setTimeout(() => setFormStatus('idle'), 5000);
-    }, 1500);
+  const handleCopy = (text, item) => {
+    navigator.clipboard.writeText(text);
+    setCopiedItem(item);
+    setTimeout(() => setCopiedItem(null), 2000);
   };
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const contactInfo = [
+  const contactMethods = [
     {
       icon: Mail,
       label: 'Email',
       value: 'farishafizh19@gmail.com',
-      link: 'mailto:farishafizh19@gmail.com'
+      link: 'mailto:farishafizh19@gmail.com',
+      copyValue: 'farishafizh19@gmail.com',
+      color: 'accent',
+      description: 'Best way to reach me for professional inquiries'
+    },
+    // {
+    //   icon: Phone,
+    //   label: 'Phone',
+    //   value: '+62 851-5646-8466',
+    //   link: 'tel:+6285156468466',
+    //   copyValue: '+6285156468466',
+    //   color: 'success',
+    //   description: 'Call me during business hours (GMT+7)'
+    // },
+    {
+      icon: Instagram,
+      label: 'Instagram',
+      value: '@farishafizh',
+      link: 'https://www.instagram.com/farishafizh/',
+      copyValue: 'https://www.instagram.com/farishafizh/',
+      color: 'success',
+      description: 'Follow me for personal updates and projects'
     },
     {
-      icon: Phone,
-      label: 'Phone',
-      value: '+62 851-5646-8466',
-      link: 'tel:+6285156468466'
+      icon: Github,
+      label: 'GitHub',
+      value: 'github.com/myfarism',
+      link: 'https://github.com/myfarism',
+      copyValue: 'https://github.com/myfarism',
+      color: 'secondary',
+      description: 'Check out my code and contributions'
     },
+    {
+      icon: Linkedin,
+      label: 'LinkedIn',
+      value: 'Muhammad Faris Hafizh',
+      link: 'https://www.linkedin.com/in/muhammad-faris-hafizh/',
+      copyValue: 'https://www.linkedin.com/in/muhammad-faris-hafizh/',
+      color: 'accent',
+      description: 'Let\'s connect professionally'
+    },
+  ];
+
+  const additionalInfo = [
     {
       icon: MapPin,
       label: 'Location',
-      value: 'Jakarta, Indonesia',
-      link: null
+      value: 'Jakarta, Indonesia 🇮🇩',
+      description: 'Available for on-site (Jakarta) or remote work'
     },
     {
       icon: Clock,
       label: 'Response Time',
       value: '~24 hours',
-      link: null
+      description: 'I typically respond within one business day'
+    },
+    {
+      icon: MessageSquare,
+      label: 'Preferred Contact',
+      value: 'Email',
+      description: 'For fastest response, please use email'
     },
   ];
 
-  const socials = [
-    {
-      icon: Github,
-      name: 'GitHub',
-      username: '@myfarism',
-      url: 'https://github.com/myfarism'
-    },
-    {
-      icon: Linkedin,
-      name: 'LinkedIn',
-      username: 'Muhammad Faris Hafizh',
-      url: 'https://www.linkedin.com/in/muhammad-faris-hafizh/'
-    },
-  ];
+  const getColorClass = (color) => {
+    const colors = {
+      accent: 'border-terminal-accent/30 hover:border-terminal-accent',
+      success: 'border-terminal-success/30 hover:border-terminal-success',
+      secondary: 'border-terminal-secondary/30 hover:border-terminal-secondary'
+    };
+    return colors[color] || colors.accent;
+  };
+
+  const getIconColorClass = (color) => {
+    const colors = {
+      accent: 'text-terminal-accent',
+      success: 'text-terminal-success',
+      secondary: 'text-terminal-secondary'
+    };
+    return colors[color] || colors.accent;
+  };
 
   return (
     <section id="contact" className="min-h-screen px-6 py-20 relative">
@@ -86,220 +113,171 @@ const Contact = () => {
             Get In Touch
           </h2>
           <div className="w-20 h-1 bg-terminal-accent mb-6"></div>
-          <p className="text-terminal-text/70 text-lg">
-            Open to opportunities, collaborations, and interesting projects
+          <p className="text-terminal-text/70 text-lg max-w-2xl">
+            Open to opportunities, collaborations, and interesting projects. 
+            Feel free to reach out through any of the channels below.
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Contact Info */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="space-y-6"
-          >
-            {/* Info Cards */}
-            {contactInfo.map((info, idx) => {
-              const Icon = info.icon;
-              return (
-                <motion.div
-                  key={idx}
-                  whileHover={{ scale: 1.02, x: 5 }}
-                  className="bg-terminal-bg/40 border border-terminal-accent/20 p-4"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 border border-terminal-accent/30 flex items-center justify-center flex-shrink-0">
-                      <Icon className="w-5 h-5 text-terminal-accent" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-terminal-text/60 text-xs mb-1">{info.label}</div>
-                      {info.link ? (
-                        <a 
-                          href={info.link}
-                          className="text-terminal-text text-sm hover:text-terminal-accent transition-colors break-all"
-                        >
-                          {info.value}
-                        </a>
-                      ) : (
-                        <div className="text-terminal-text text-sm">{info.value}</div>
-                      )}
-                    </div>
+        {/* Main Contact Methods */}
+        <div className="grid md:grid-cols-2 gap-6 mb-12">
+          {contactMethods.map((contact, idx) => {
+            const Icon = contact.icon;
+            const isCopied = copiedItem === contact.label;
+            
+            return (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                whileHover={{ scale: 1.02, y: -5 }}
+                className={`bg-terminal-bg/40 border-2 ${getColorClass(contact.color)} p-6 transition-all group`}
+              >
+                <div className="flex items-start gap-4 mb-4">
+                  <div className={`w-12 h-12 border-2 ${getColorClass(contact.color)} flex items-center justify-center flex-shrink-0 ${getIconColorClass(contact.color)}`}>
+                    <Icon className="w-6 h-6" />
                   </div>
-                </motion.div>
-              );
-            })}
-
-            {/* Social Links */}
-            <div className="bg-terminal-bg/40 border border-terminal-accent/20 p-4">
-              <h3 className="text-terminal-text font-semibold mb-4">Connect With Me</h3>
-              <div className="space-y-3">
-                {socials.map((social, idx) => {
-                  const Icon = social.icon;
-                  return (
-                    <a
-                      key={idx}
-                      href={social.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 p-3 bg-terminal-bg border border-terminal-accent/20 hover:border-terminal-accent/40 transition-all group"
-                    >
-                      <Icon className="w-5 h-5 text-terminal-accent" />
-                      <div className="flex-1">
-                        <div className="text-terminal-text text-sm font-medium">{social.name}</div>
-                        <div className="text-terminal-text/60 text-xs">{social.username}</div>
-                      </div>
-                      <span className="text-terminal-accent opacity-0 group-hover:opacity-100 transition-opacity">
-                        →
-                      </span>
-                    </a>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Availability */}
-            <div className="bg-terminal-success/10 border border-terminal-success/30 p-4">
-              <div className="flex items-center gap-2 text-terminal-success font-semibold mb-2">
-                <div className="w-2 h-2 bg-terminal-success rounded-full animate-pulse"></div>
-                Available for Work
-              </div>
-              <p className="text-terminal-text/70 text-sm">
-                Currently open to backend and Android development opportunities.
-              </p>
-            </div>
-          </motion.div>
-
-          {/* Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="lg:col-span-2"
-          >
-            <div className="bg-terminal-bg/40 border border-terminal-accent/20 p-6">
-              <div className="flex items-center gap-2 mb-6">
-                <Send className="w-5 h-5 text-terminal-accent" />
-                <h3 className="text-xl font-bold text-terminal-text">Send a Message</h3>
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-5">
-                {/* Name */}
-                <div>
-                  <label className="block text-terminal-text/80 text-sm font-medium mb-2">
-                    Your Name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 bg-terminal-bg border border-terminal-accent/20 text-terminal-text placeholder-terminal-text/40 focus:outline-none focus:border-terminal-accent transition-all"
-                    placeholder="John Doe"
-                  />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-terminal-text font-bold mb-1">{contact.label}</h3>
+                    <p className="text-terminal-text/60 text-xs mb-2">{contact.description}</p>
+                  </div>
                 </div>
 
-                {/* Email */}
-                <div>
-                  <label className="block text-terminal-text/80 text-sm font-medium mb-2">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 bg-terminal-bg border border-terminal-accent/20 text-terminal-text placeholder-terminal-text/40 focus:outline-none focus:border-terminal-accent transition-all"
-                    placeholder="john@example.com"
-                  />
+                <div className="bg-terminal-bg/60 border border-terminal-accent/20 p-4 mb-3">
+                  <code className="text-terminal-text/90 text-sm break-all">
+                    {contact.value}
+                  </code>
                 </div>
 
-                {/* Message */}
-                <div>
-                  <label className="block text-terminal-text/80 text-sm font-medium mb-2">
-                    Message
-                  </label>
-                  <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    rows="6"
-                    className="w-full px-4 py-3 bg-terminal-bg border border-terminal-accent/20 text-terminal-text placeholder-terminal-text/40 focus:outline-none focus:border-terminal-accent transition-all resize-none"
-                    placeholder="Tell me about your project or opportunity..."
-                  />
+                <div className="flex gap-2">
+                  <a
+                    href={contact.link}
+                    target={contact.link.startsWith('http') ? '_blank' : undefined}
+                    rel={contact.link.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    className={`flex-1 px-4 py-2 border ${getColorClass(contact.color)} ${getIconColorClass(contact.color)} text-center text-sm font-medium transition-all hover:bg-terminal-accent/10`}
+                  >
+                    {contact.label === 'Email' ? 'Send Email' : 
+                     contact.label === 'Phone' ? 'Call Now' : 
+                     'Visit Profile'}
+                  </a>
+                  <button
+                    onClick={() => handleCopy(contact.copyValue, contact.label)}
+                    className="px-4 py-2 border border-terminal-accent/20 text-terminal-text/80 hover:border-terminal-accent hover:text-terminal-accent transition-all"
+                    title="Copy to clipboard"
+                  >
+                    {isCopied ? (
+                      <Check className="w-4 h-4" />
+                    ) : (
+                      <Copy className="w-4 h-4" />
+                    )}
+                  </button>
                 </div>
 
-                {/* Submit Button */}
-                <motion.button
-                  type="submit"
-                  disabled={formStatus === 'sending'}
-                  whileHover={{ scale: formStatus === 'idle' ? 1.02 : 1 }}
-                  whileTap={{ scale: formStatus === 'idle' ? 0.98 : 1 }}
-                  className={`w-full py-4 font-semibold flex items-center justify-center gap-2 transition-all ${
-                    formStatus === 'success'
-                      ? 'bg-terminal-success text-terminal-bg'
-                      : formStatus === 'sending'
-                      ? 'bg-terminal-accent/70 text-terminal-bg cursor-wait'
-                      : 'bg-terminal-accent text-terminal-bg hover:bg-terminal-accent/90'
-                  }`}
-                >
-                  {formStatus === 'sending' && (
-                    <>
-                      <div className="w-5 h-5 border-2 border-terminal-bg border-t-transparent rounded-full animate-spin"></div>
-                      Sending...
-                    </>
-                  )}
-                  {formStatus === 'success' && (
-                    <>
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      Message Sent!
-                    </>
-                  )}
-                  {formStatus === 'idle' && (
-                    <>
-                      <Send className="w-5 h-5" />
-                      Send Message
-                    </>
-                  )}
-                </motion.button>
-
-                {formStatus === 'success' && (
+                {isCopied && (
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-4 bg-terminal-success/10 border border-terminal-success/30"
+                    className="mt-2 text-terminal-success text-xs text-center"
                   >
-                    <p className="text-terminal-success text-sm text-center">
-                      Thanks for reaching out! I'll get back to you within 24 hours.
-                    </p>
+                    ✓ Copied to clipboard!
                   </motion.div>
                 )}
-              </form>
-            </div>
-          </motion.div>
+              </motion.div>
+            );
+          })}
         </div>
+
+        {/* Additional Info */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4 }}
+          className="grid md:grid-cols-3 gap-6 mb-12"
+        >
+          {additionalInfo.map((info, idx) => {
+            const Icon = info.icon;
+            return (
+              <motion.div
+                key={idx}
+                whileHover={{ scale: 1.02 }}
+                className="bg-terminal-bg/40 border border-terminal-accent/20 p-6"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 border border-terminal-accent/30 flex items-center justify-center">
+                    <Icon className="w-5 h-5 text-terminal-accent" />
+                  </div>
+                  <h4 className="text-terminal-text font-semibold">{info.label}</h4>
+                </div>
+                <p className="text-terminal-text/90 font-mono text-sm mb-2">{info.value}</p>
+                <p className="text-terminal-text/60 text-xs">{info.description}</p>
+              </motion.div>
+            );
+          })}
+        </motion.div>
+
+        {/* Availability Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.6 }}
+          className="bg-terminal-success/10 border-2 border-terminal-success/30 p-8 text-center"
+        >
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="w-4 h-4 bg-terminal-success rounded-full animate-pulse"></div>
+            <h3 className="text-2xl font-bold text-terminal-success">Available for Work</h3>
+          </div>
+          <p className="text-terminal-text/80 mb-4 max-w-2xl mx-auto">
+            I'm currently open to backend and Android development opportunities, 
+            freelance projects, and collaborations. Let's build something great together!
+          </p>
+          <div className="flex flex-wrap gap-2 justify-center text-sm">
+            <span className="px-3 py-1 bg-terminal-success/20 border border-terminal-success/30 text-terminal-success">
+              Backend Development
+            </span>
+            <span className="px-3 py-1 bg-terminal-success/20 border border-terminal-success/30 text-terminal-success">
+              Android Development
+            </span>
+            <span className="px-3 py-1 bg-terminal-success/20 border border-terminal-success/30 text-terminal-success">
+              API Development
+            </span>
+            <span className="px-3 py-1 bg-terminal-success/20 border border-terminal-success/30 text-terminal-success">
+              Full-Stack Projects
+            </span>
+          </div>
+        </motion.div>
 
         {/* Footer */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.8 }}
+          transition={{ delay: 1 }}
           className="mt-20 pt-8 border-t border-terminal-accent/20 text-center"
         >
-          <p className="text-terminal-text/60 text-sm mb-2">
-            © 2026 Muhammad Faris Hafizh • Built with React & Terminal Aesthetic
-          </p>
-          <p className="text-terminal-text/40 text-xs">
-            No AI templates. Just pure code and creativity ✨
-          </p>
+          <div className="flex justify-center gap-4 text-terminal-text/60 text-sm">
+            <a href="#about" className="hover:text-terminal-accent transition-colors">
+              About
+            </a>
+            <span>•</span>
+            <a href="#projects" className="hover:text-terminal-accent transition-colors">
+              Projects
+            </a>
+            <span>•</span>
+            <a href="#skills" className="hover:text-terminal-accent transition-colors">
+              Skills
+            </a>
+            <span>•</span>
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="hover:text-terminal-accent transition-colors"
+            >
+              Back to Top ↑
+            </button>
+          </div>
         </motion.div>
       </div>
     </section>

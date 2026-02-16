@@ -5,15 +5,7 @@ const Hero = () => {
   return (
     <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-20 relative overflow-hidden">
       {/* Animated grid background */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-0" 
-          style={{
-            backgroundImage: `linear-gradient(to right, #f59e0b 1px, transparent 1px),
-                            linear-gradient(to bottom, #f59e0b 1px, transparent 1px)`,
-            backgroundSize: '40px 40px'
-          }}
-        />
-      </div>
+
 
       <div className="max-w-6xl w-full relative z-10">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
