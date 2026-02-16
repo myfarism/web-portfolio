@@ -115,7 +115,7 @@ const ProjectModal = ({ project, onClose }) => {
             </div>
 
             {/* Code Snippet */}
-            {project.codeSnippet && (
+            {/* {project.codeSnippet && (
               <div className="space-y-2">
                 <div className="text-terminal-accent text-sm">## Code Sample</div>
                 <div className="bg-terminal-bg/60 border border-terminal-accent/20 p-4 rounded overflow-x-auto">
@@ -124,7 +124,7 @@ const ProjectModal = ({ project, onClose }) => {
                   </pre>
                 </div>
               </div>
-            )}
+            )} */}
 
             {/* Challenges & Solutions */}
             {project.challenges && (

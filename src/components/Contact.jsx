@@ -1,244 +1,236 @@
 import { motion } from 'motion/react';
 import { useState } from 'react';
+import { Mail, Send, Github, Linkedin, Phone, MapPin, Clock } from 'lucide-react';
 
 const Contact = () => {
-  const [copiedEmail, setCopiedEmail] = useState(false);
-  const [formStatus, setFormStatus] = useState('idle'); // idle, sending, success, error
-
-  const email = 'your.email@example.com'; // Ganti dengan email kamu
-  const socials = [
-    { name: 'GitHub', url: 'https://github.com/yourusername', icon: '⌘', handle: '@yourusername' },
-    { name: 'LinkedIn', url: 'https://linkedin.com/in/yourprofile', icon: '💼', handle: '/in/yourprofile' },
-    { name: 'Twitter', url: 'https://twitter.com/yourhandle', icon: '🐦', handle: '@yourhandle' },
-    { name: 'Email', url: `mailto:${email}`, icon: '📧', handle: email, copyable: true }
-  ];
-
-  const quickMessages = [
-    "Let's build something cool together",
-    "I have a project idea",
-    "Looking for collaboration",
-    "Want to discuss opportunities",
-    "Just saying hi 👋"
-  ];
-
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(email);
-    setCopiedEmail(true);
-    setTimeout(() => setCopiedEmail(false), 2000);
-  };
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+  const [formStatus, setFormStatus] = useState('idle');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormStatus('sending');
     
-    // Simulate sending (replace with actual form submission)
+    // Simulate sending
     setTimeout(() => {
       setFormStatus('success');
-      setTimeout(() => setFormStatus('idle'), 3000);
+      setFormData({ name: '', email: '', message: '' });
+      setTimeout(() => setFormStatus('idle'), 5000);
     }, 1500);
   };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const contactInfo = [
+    {
+      icon: Mail,
+      label: 'Email',
+      value: 'farishafizh19@gmail.com',
+      link: 'mailto:farishafizh19@gmail.com'
+    },
+    {
+      icon: Phone,
+      label: 'Phone',
+      value: '+62 851-5646-8466',
+      link: 'tel:+6285156468466'
+    },
+    {
+      icon: MapPin,
+      label: 'Location',
+      value: 'Jakarta, Indonesia',
+      link: null
+    },
+    {
+      icon: Clock,
+      label: 'Response Time',
+      value: '~24 hours',
+      link: null
+    },
+  ];
+
+  const socials = [
+    {
+      icon: Github,
+      name: 'GitHub',
+      username: '@myfarism',
+      url: 'https://github.com/myfarism'
+    },
+    {
+      icon: Linkedin,
+      name: 'LinkedIn',
+      username: 'Muhammad Faris Hafizh',
+      url: 'https://www.linkedin.com/in/muhammad-faris-hafizh/'
+    },
+  ];
 
   return (
     <section id="contact" className="min-h-screen px-6 py-20 relative">
       <div className="max-w-6xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.8 }}
+          className="mb-12"
         >
-          {/* Header */}
-          <div className="mb-16 text-center">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="h-px flex-1 bg-terminal-accent/20"></div>
-              <span className="text-terminal-accent text-sm">~/contact</span>
-              <div className="h-px flex-1 bg-terminal-accent/20"></div>
-            </div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-terminal-text mb-4">
-              ping <span className="text-terminal-accent">--message</span>
-            </h2>
-            <p className="text-terminal-text/70 text-lg max-w-2xl mx-auto">
-              Got a project in mind? Want to collaborate? Or just want to say hi?
-              I'm always open to interesting conversations.
-            </p>
-          </div>
+          <div className="font-mono text-terminal-accent mb-2">$ cat contact.txt</div>
+          <h2 className="text-4xl md:text-5xl font-bold text-terminal-text mb-4">
+            Get In Touch
+          </h2>
+          <div className="w-20 h-1 bg-terminal-accent mb-6"></div>
+          <p className="text-terminal-text/70 text-lg">
+            Open to opportunities, collaborations, and interesting projects
+          </p>
+        </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* Left Side - Social Links & Quick Info */}
-            <div className="space-y-6">
-              {/* Quick Message Buttons */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className="bg-terminal-bg/40 border border-terminal-accent/20 rounded-lg p-6"
-              >
-                <h3 className="text-xl font-bold text-terminal-text mb-4">
-                  Quick Start
-                </h3>
-                <p className="text-terminal-text/60 text-sm mb-4">
-                  Pick a template to get started faster:
-                </p>
-                <div className="space-y-2">
-                  {quickMessages.map((message, idx) => (
-                    <motion.button
-                      key={idx}
-                      whileHover={{ x: 5 }}
-                      className="w-full text-left px-4 py-2 bg-terminal-bg/60 border border-terminal-accent/10 rounded text-terminal-text/70 hover:text-terminal-accent hover:border-terminal-accent/30 transition-all text-sm"
-                      onClick={() => {
-                        const textarea = document.getElementById('message');
-                        if (textarea) textarea.value = message;
-                      }}
-                    >
-                      <span className="text-terminal-accent mr-2">▹</span>
-                      {message}
-                    </motion.button>
-                  ))}
-                </div>
-              </motion.div>
-
-              {/* Social Links */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-                className="bg-terminal-bg/40 border border-terminal-accent/20 rounded-lg p-6"
-              >
-                <h3 className="text-xl font-bold text-terminal-text mb-4">
-                  Find Me Online
-                </h3>
-                <div className="space-y-3">
-                  {socials.map((social, idx) => (
-                    <motion.div
-                      key={social.name}
-                      initial={{ opacity: 0, x: -10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: idx * 0.1 }}
-                      className="flex items-center justify-between group"
-                    >
-                      <a 
-                        href={social.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-3 flex-1 text-terminal-text/70 hover:text-terminal-accent transition-colors"
-                      >
-                        <span className="text-2xl">{social.icon}</span>
-                        <div>
-                          <div className="font-medium">{social.name}</div>
-                          <div className="text-sm text-terminal-text/50">
-                            {social.handle}
-                          </div>
-                        </div>
-                      </a>
-                      {social.copyable && (
-                        <button
-                          onClick={handleCopyEmail}
-                          className="px-3 py-1 text-xs bg-terminal-accent/10 text-terminal-accent border border-terminal-accent/30 rounded hover:bg-terminal-accent/20 transition-colors"
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Contact Info */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="space-y-6"
+          >
+            {/* Info Cards */}
+            {contactInfo.map((info, idx) => {
+              const Icon = info.icon;
+              return (
+                <motion.div
+                  key={idx}
+                  whileHover={{ scale: 1.02, x: 5 }}
+                  className="bg-terminal-bg/40 border border-terminal-accent/20 p-4"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 border border-terminal-accent/30 flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-5 h-5 text-terminal-accent" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-terminal-text/60 text-xs mb-1">{info.label}</div>
+                      {info.link ? (
+                        <a 
+                          href={info.link}
+                          className="text-terminal-text text-sm hover:text-terminal-accent transition-colors break-all"
                         >
-                          {copiedEmail ? 'Copied!' : 'Copy'}
-                        </button>
+                          {info.value}
+                        </a>
+                      ) : (
+                        <div className="text-terminal-text text-sm">{info.value}</div>
                       )}
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
 
-              {/* Fun Stats */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                className="bg-terminal-bg/40 border border-terminal-accent/20 rounded-lg p-6"
-              >
-                <h3 className="text-xl font-bold text-terminal-text mb-4">
-                  Response Time
-                </h3>
-                <div className="space-y-3 text-sm">
-                  <div className="flex items-center justify-between">
-                    <span className="text-terminal-text/60">Email</span>
-                    <span className="text-terminal-success">~24h</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-terminal-text/60">LinkedIn</span>
-                    <span className="text-terminal-accent">~48h</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-terminal-text/60">GitHub Issues</span>
-                    <span className="text-terminal-secondary">When I see it 👀</span>
-                  </div>
-                </div>
-              </motion.div>
+            {/* Social Links */}
+            <div className="bg-terminal-bg/40 border border-terminal-accent/20 p-4">
+              <h3 className="text-terminal-text font-semibold mb-4">Connect With Me</h3>
+              <div className="space-y-3">
+                {socials.map((social, idx) => {
+                  const Icon = social.icon;
+                  return (
+                    <a
+                      key={idx}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 p-3 bg-terminal-bg border border-terminal-accent/20 hover:border-terminal-accent/40 transition-all group"
+                    >
+                      <Icon className="w-5 h-5 text-terminal-accent" />
+                      <div className="flex-1">
+                        <div className="text-terminal-text text-sm font-medium">{social.name}</div>
+                        <div className="text-terminal-text/60 text-xs">{social.username}</div>
+                      </div>
+                      <span className="text-terminal-accent opacity-0 group-hover:opacity-100 transition-opacity">
+                        →
+                      </span>
+                    </a>
+                  );
+                })}
+              </div>
             </div>
 
-            {/* Right Side - Contact Form */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="bg-terminal-bg/40 border border-terminal-accent/20 rounded-lg p-8"
-            >
-              <h3 className="text-2xl font-bold text-terminal-text mb-6">
-                Send a Message
-              </h3>
+            {/* Availability */}
+            <div className="bg-terminal-success/10 border border-terminal-success/30 p-4">
+              <div className="flex items-center gap-2 text-terminal-success font-semibold mb-2">
+                <div className="w-2 h-2 bg-terminal-success rounded-full animate-pulse"></div>
+                Available for Work
+              </div>
+              <p className="text-terminal-text/70 text-sm">
+                Currently open to backend and Android development opportunities.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Contact Form */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="lg:col-span-2"
+          >
+            <div className="bg-terminal-bg/40 border border-terminal-accent/20 p-6">
+              <div className="flex items-center gap-2 mb-6">
+                <Send className="w-5 h-5 text-terminal-accent" />
+                <h3 className="text-xl font-bold text-terminal-text">Send a Message</h3>
+              </div>
 
               <form onSubmit={handleSubmit} className="space-y-5">
                 {/* Name */}
                 <div>
-                  <label className="block text-terminal-text/70 text-sm mb-2">
-                    $ whoami
+                  <label className="block text-terminal-text/80 text-sm font-medium mb-2">
+                    Your Name
                   </label>
                   <input
                     type="text"
                     name="name"
+                    value={formData.name}
+                    onChange={handleChange}
                     required
-                    className="w-full bg-terminal-bg/60 border border-terminal-accent/20 rounded px-4 py-3 text-terminal-text focus:outline-none focus:border-terminal-accent transition-colors"
-                    placeholder="Your name"
+                    className="w-full px-4 py-3 bg-terminal-bg border border-terminal-accent/20 text-terminal-text placeholder-terminal-text/40 focus:outline-none focus:border-terminal-accent transition-all"
+                    placeholder="John Doe"
                   />
                 </div>
 
                 {/* Email */}
                 <div>
-                  <label className="block text-terminal-text/70 text-sm mb-2">
-                    $ echo $EMAIL
+                  <label className="block text-terminal-text/80 text-sm font-medium mb-2">
+                    Email Address
                   </label>
                   <input
                     type="email"
                     name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     required
-                    className="w-full bg-terminal-bg/60 border border-terminal-accent/20 rounded px-4 py-3 text-terminal-text focus:outline-none focus:border-terminal-accent transition-colors"
-                    placeholder="your.email@example.com"
-                  />
-                </div>
-
-                {/* Subject */}
-                <div>
-                  <label className="block text-terminal-text/70 text-sm mb-2">
-                    $ cat subject.txt
-                  </label>
-                  <input
-                    type="text"
-                    name="subject"
-                    required
-                    className="w-full bg-terminal-bg/60 border border-terminal-accent/20 rounded px-4 py-3 text-terminal-text focus:outline-none focus:border-terminal-accent transition-colors"
-                    placeholder="What's this about?"
+                    className="w-full px-4 py-3 bg-terminal-bg border border-terminal-accent/20 text-terminal-text placeholder-terminal-text/40 focus:outline-none focus:border-terminal-accent transition-all"
+                    placeholder="john@example.com"
                   />
                 </div>
 
                 {/* Message */}
                 <div>
-                  <label className="block text-terminal-text/70 text-sm mb-2">
-                    $ vim message.md
+                  <label className="block text-terminal-text/80 text-sm font-medium mb-2">
+                    Message
                   </label>
                   <textarea
-                    id="message"
                     name="message"
+                    value={formData.message}
+                    onChange={handleChange}
                     required
                     rows="6"
-                    className="w-full bg-terminal-bg/60 border border-terminal-accent/20 rounded px-4 py-3 text-terminal-text focus:outline-none focus:border-terminal-accent transition-colors resize-none"
-                    placeholder="Tell me about your project, idea, or just say hi..."
+                    className="w-full px-4 py-3 bg-terminal-bg border border-terminal-accent/20 text-terminal-text placeholder-terminal-text/40 focus:outline-none focus:border-terminal-accent transition-all resize-none"
+                    placeholder="Tell me about your project or opportunity..."
                   />
                 </div>
 
@@ -248,48 +240,66 @@ const Contact = () => {
                   disabled={formStatus === 'sending'}
                   whileHover={{ scale: formStatus === 'idle' ? 1.02 : 1 }}
                   whileTap={{ scale: formStatus === 'idle' ? 0.98 : 1 }}
-                  className={`w-full py-3 rounded font-medium transition-all ${
+                  className={`w-full py-4 font-semibold flex items-center justify-center gap-2 transition-all ${
                     formStatus === 'success'
-                      ? 'bg-terminal-success/20 text-terminal-success border border-terminal-success/30'
+                      ? 'bg-terminal-success text-terminal-bg'
                       : formStatus === 'sending'
-                      ? 'bg-terminal-accent/20 text-terminal-accent border border-terminal-accent/30 cursor-wait'
-                      : 'bg-terminal-accent text-terminal-bg border border-terminal-accent hover:bg-terminal-accent/90'
+                      ? 'bg-terminal-accent/70 text-terminal-bg cursor-wait'
+                      : 'bg-terminal-accent text-terminal-bg hover:bg-terminal-accent/90'
                   }`}
                 >
-                  {formStatus === 'sending' && '⟳ Sending...'}
-                  {formStatus === 'success' && '✓ Message sent!'}
-                  {formStatus === 'idle' && 'git push origin message'}
+                  {formStatus === 'sending' && (
+                    <>
+                      <div className="w-5 h-5 border-2 border-terminal-bg border-t-transparent rounded-full animate-spin"></div>
+                      Sending...
+                    </>
+                  )}
+                  {formStatus === 'success' && (
+                    <>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Message Sent!
+                    </>
+                  )}
+                  {formStatus === 'idle' && (
+                    <>
+                      <Send className="w-5 h-5" />
+                      Send Message
+                    </>
+                  )}
                 </motion.button>
+
+                {formStatus === 'success' && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="p-4 bg-terminal-success/10 border border-terminal-success/30"
+                  >
+                    <p className="text-terminal-success text-sm text-center">
+                      Thanks for reaching out! I'll get back to you within 24 hours.
+                    </p>
+                  </motion.div>
+                )}
               </form>
-
-              {formStatus === 'success' && (
-                <motion.p
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 text-terminal-success text-sm text-center"
-                >
-                  Thanks! I'll get back to you soon.
-                </motion.p>
-              )}
-            </motion.div>
-          </div>
-
-          {/* Footer */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mt-20 text-center"
-          >
-            <div className="inline-block bg-terminal-bg/40 border border-terminal-accent/20 rounded-lg px-6 py-4">
-              <p className="text-terminal-text/60 text-sm">
-                Built with React, Vite, and too much coffee ☕
-              </p>
-              <p className="text-terminal-text/40 text-xs mt-1">
-                © 2026 • No AI templates were used in the making of this portfolio
-              </p>
             </div>
           </motion.div>
+        </div>
+
+        {/* Footer */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.8 }}
+          className="mt-20 pt-8 border-t border-terminal-accent/20 text-center"
+        >
+          <p className="text-terminal-text/60 text-sm mb-2">
+            © 2026 Muhammad Faris Hafizh • Built with React & Terminal Aesthetic
+          </p>
+          <p className="text-terminal-text/40 text-xs">
+            No AI templates. Just pure code and creativity ✨
+          </p>
         </motion.div>
       </div>
     </section>

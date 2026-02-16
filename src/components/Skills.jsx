@@ -1,267 +1,249 @@
 import { motion } from 'motion/react';
-import { useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { Server, Code, Smartphone, Database, Package, GitBranch } from 'lucide-react';
 
 const Skills = () => {
-  const [activeCategory, setActiveCategory] = useState('backend');
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1
+  });
 
-  const skillTree = {
-    backend: {
-      title: 'Backend & APIs',
-      icon: '⚙️',
-      description: 'Building scalable server-side applications and APIs',
+  const skillCategories = [
+    {
+      name: 'Backend Development',
+      icon: Server,
+      color: 'accent',
       skills: [
-        { name: 'Node.js / Express', level: 'expert', years: 3, projects: 12 },
-        { name: 'PostgreSQL', level: 'expert', years: 3, projects: 8 },
-        { name: 'Prisma ORM', level: 'advanced', years: 2, projects: 6 },
-        { name: 'Docker', level: 'advanced', years: 2, projects: 10 },
-        { name: 'RESTful APIs', level: 'expert', years: 3, projects: 15 },
-        { name: 'GraphQL', level: 'intermediate', years: 1, projects: 3 }
+        { name: 'Node.js', level: 85 },
+        { name: 'Express', level: 85 },
+        { name: 'REST API', level: 90 },
+        { name: 'PostgreSQL', level: 75 },
+        { name: 'MongoDB', level: 70 },
       ]
     },
-    frontend: {
-      title: 'Frontend & UI',
-      icon: '🎨',
-      description: 'Crafting responsive and interactive user interfaces',
+    {
+      name: 'Android Development',
+      icon: Smartphone,
+      color: 'success',
       skills: [
-        { name: 'React', level: 'expert', years: 3, projects: 15 },
-        { name: 'TypeScript', level: 'advanced', years: 2, projects: 10 },
-        { name: 'Tailwind CSS', level: 'expert', years: 2, projects: 12 },
-        { name: 'Next.js', level: 'advanced', years: 2, projects: 5 },
-        { name: 'Framer Motion', level: 'advanced', years: 1, projects: 8 },
-        { name: 'ShadCN UI', level: 'advanced', years: 1, projects: 6 }
+        { name: 'Kotlin', level: 90 },
+        { name: 'Jetpack Compose', level: 85 },
+        { name: 'Android SDK', level: 85 },
+        { name: 'Room DB', level: 80 },
+        { name: 'Coroutines', level: 75 },
       ]
     },
-    blockchain: {
-      title: 'Blockchain & Web3',
-      icon: '⛓️',
-      description: 'Decentralized applications and smart contracts',
+    {
+      name: 'Programming Languages',
+      icon: Code,
+      color: 'secondary',
       skills: [
-        { name: 'Solidity', level: 'advanced', years: 2, projects: 4 },
-        { name: 'Hardhat', level: 'advanced', years: 2, projects: 4 },
-        { name: 'Web3.js / Ethers.js', level: 'advanced', years: 2, projects: 5 },
-        { name: 'Smart Contracts', level: 'advanced', years: 2, projects: 4 },
-        { name: 'DApp Development', level: 'intermediate', years: 1, projects: 3 }
+        { name: 'JavaScript', level: 85 },
+        { name: 'Kotlin', level: 90 },
+        { name: 'Python', level: 75 },
+        { name: 'C++', level: 65 },
+        { name: 'SQL', level: 80 },
       ]
     },
-    ai: {
-      title: 'AI & Machine Learning',
-      icon: '🤖',
-      description: 'Training models and integrating AI capabilities',
+    {
+      name: 'Tools & Technologies',
+      icon: Package,
+      color: 'accent',
       skills: [
-        { name: 'Python', level: 'expert', years: 3, projects: 20 },
-        { name: 'TensorFlow', level: 'advanced', years: 2, projects: 6 },
-        { name: 'PyTorch', level: 'intermediate', years: 1, projects: 4 },
-        { name: 'OpenCV', level: 'advanced', years: 2, projects: 5 },
-        { name: 'LLM Integration', level: 'advanced', years: 1, projects: 8 },
-        { name: 'Prompt Engineering', level: 'expert', years: 1, projects: 15 }
+        { name: 'Docker', level: 80 },
+        { name: 'Git', level: 90 },
+        { name: 'Figma', level: 70 },
+        { name: 'Postman', level: 85 },
+        { name: 'Linux', level: 75 },
       ]
     },
-    mobile: {
-      title: 'Mobile Development',
-      icon: '📱',
-      description: 'Native Android applications',
+    {
+      name: 'Frontend & UI',
+      icon: Code,
+      color: 'secondary',
       skills: [
-        { name: 'Kotlin', level: 'advanced', years: 2, projects: 5 },
-        { name: 'Jetpack Compose', level: 'advanced', years: 1, projects: 4 },
-        { name: 'Android SDK', level: 'advanced', years: 2, projects: 5 },
-        { name: 'Room Database', level: 'intermediate', years: 1, projects: 3 },
-        { name: 'Coroutines', level: 'advanced', years: 1, projects: 5 }
+        { name: 'React', level: 75 },
+        { name: 'Tailwind CSS', level: 80 },
+        { name: 'Material Design', level: 85 },
+        { name: 'Responsive Design', level: 85 },
       ]
     },
-    embedded: {
-      title: 'Embedded Systems',
-      icon: '🔧',
-      description: 'IoT and microcontroller programming',
+    {
+      name: 'Database & Cloud',
+      icon: Database,
+      color: 'success',
       skills: [
-        { name: 'C/C++', level: 'advanced', years: 2, projects: 6 },
-        { name: 'ESP32', level: 'advanced', years: 2, projects: 5 },
-        { name: 'IoT Protocols', level: 'intermediate', years: 1, projects: 4 },
-        { name: 'Embedded Linux', level: 'intermediate', years: 1, projects: 2 }
+        { name: 'PostgreSQL', level: 75 },
+        { name: 'MongoDB', level: 70 },
+        { name: 'Firebase', level: 65 },
+        { name: 'Database Design', level: 80 },
       ]
+    },
+  ];
+
+  const softSkills = [
+    'Adaptability',
+    'Problem Solving',
+    'Effective Communication',
+    'Leadership',
+    'Creativity',
+    'Team Collaboration',
+    'Time Management',
+    'Project Management'
+  ];
+
+  const certifications = [
+    {
+      name: 'Android Application Development - Intermediate',
+      issuer: 'Dicoding Indonesia',
+      year: '2024'
+    },
+    {
+      name: 'Building Android Apps with Jetpack Compose',
+      issuer: 'Dicoding Indonesia',
+      year: '2024'
+    },
+    {
+      name: 'Bangkit Academy - Android Path Graduate',
+      issuer: 'Google, GoTo, Traveloka',
+      year: '2025'
     }
+  ];
+
+  const getColorClass = (color) => {
+    const colors = {
+      accent: 'text-terminal-accent',
+      success: 'text-terminal-success',
+      secondary: 'text-terminal-secondary'
+    };
+    return colors[color] || colors.accent;
   };
 
-  const getLevelColor = (level) => {
-    switch(level) {
-      case 'expert': return 'text-terminal-success';
-      case 'advanced': return 'text-terminal-accent';
-      case 'intermediate': return 'text-terminal-secondary';
-      default: return 'text-terminal-text/50';
-    }
-  };
-
-  const getLevelBars = (level) => {
-    switch(level) {
-      case 'expert': return 5;
-      case 'advanced': return 4;
-      case 'intermediate': return 3;
-      default: return 2;
-    }
+  const getBarColorClass = (color) => {
+    const colors = {
+      accent: 'bg-terminal-accent',
+      success: 'bg-terminal-success',
+      secondary: 'bg-terminal-secondary'
+    };
+    return colors[color] || colors.accent;
   };
 
   return (
     <section id="skills" className="min-h-screen px-6 py-20 relative">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          ref={ref}
+          initial={{ opacity: 0, y: 50 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="mb-12"
         >
-          {/* Header */}
-          <div className="mb-16">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="text-terminal-accent text-sm">~/skills</span>
-              <div className="h-px flex-1 bg-terminal-accent/20"></div>
-            </div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-terminal-text mb-4">
-              cat <span className="text-terminal-accent">tech_stack</span>.json
-            </h2>
-            <p className="text-terminal-text/70 text-lg max-w-2xl">
-              Technologies I've worked with, organized by domain. No progress bars—
-              just real experience measured in years and projects shipped.
-            </p>
-          </div>
+          <div className="font-mono text-terminal-accent mb-2">$ cat skills.json</div>
+          <h2 className="text-4xl md:text-5xl font-bold text-terminal-text mb-4">
+            Skills & Expertise
+          </h2>
+          <div className="w-20 h-1 bg-terminal-accent mb-6"></div>
+        </motion.div>
 
-          {/* Category Selector */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-12">
-            {Object.entries(skillTree).map(([key, category]) => (
-              <motion.button
-                key={key}
-                onClick={() => setActiveCategory(key)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`p-4 rounded-lg border transition-all text-left ${
-                  activeCategory === key
-                    ? 'bg-terminal-accent text-terminal-bg border-terminal-accent'
-                    : 'bg-terminal-bg/40 text-terminal-text/70 border-terminal-accent/20 hover:border-terminal-accent/40'
-                }`}
+        {/* Technical Skills */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {skillCategories.map((category, idx) => {
+            const Icon = category.icon;
+            return (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={inView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                className="bg-terminal-bg/40 border border-terminal-accent/20 p-6 hover:border-terminal-accent/40 transition-all"
               >
-                <div className="text-2xl mb-2">{category.icon}</div>
-                <div className="text-sm font-medium">{category.title}</div>
-              </motion.button>
+                <div className="flex items-center gap-3 mb-6">
+                  <div className={`w-10 h-10 border border-terminal-accent/30 flex items-center justify-center ${getColorClass(category.color)}`}>
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <h3 className="font-bold text-terminal-text">{category.name}</h3>
+                </div>
+
+                <div className="space-y-4">
+                  {category.skills.map((skill, i) => (
+                    <div key={i}>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-terminal-text/90 text-sm">{skill.name}</span>
+                        <span className="text-terminal-text/60 text-xs font-mono">{skill.level}%</span>
+                      </div>
+                      <div className="h-1.5 bg-terminal-bg/60 border border-terminal-accent/10 overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={inView ? { width: `${skill.level}%` } : {}}
+                          transition={{ duration: 1, delay: idx * 0.1 + i * 0.05 }}
+                          className={`h-full ${getBarColorClass(category.color)}`}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* Soft Skills */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="bg-terminal-bg/40 border border-terminal-accent/20 p-6 mb-12"
+        >
+          <h3 className="font-bold text-terminal-text mb-4 flex items-center gap-2">
+            <GitBranch className="w-5 h-5 text-terminal-accent" />
+            Soft Skills
+          </h3>
+          <div className="flex flex-wrap gap-3">
+            {softSkills.map((skill, idx) => (
+              <motion.span
+                key={idx}
+                initial={{ opacity: 0, scale: 0 }}
+                animate={inView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ delay: 0.8 + idx * 0.05 }}
+                whileHover={{ scale: 1.05, y: -2 }}
+                className="px-4 py-2 bg-terminal-bg border border-terminal-accent/30 text-terminal-text/80 text-sm hover:border-terminal-accent hover:text-terminal-accent transition-all cursor-default"
+              >
+                {skill}
+              </motion.span>
             ))}
           </div>
+        </motion.div>
 
-          {/* Active Category Display */}
-          <motion.div
-            key={activeCategory}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3 }}
-            className="bg-terminal-bg/40 border border-terminal-accent/20 rounded-lg p-8"
-          >
-            {/* Category Header */}
-            <div className="mb-8">
-              <div className="flex items-center gap-3 mb-3">
-                <span className="text-4xl">{skillTree[activeCategory].icon}</span>
-                <h3 className="text-3xl font-bold text-terminal-text">
-                  {skillTree[activeCategory].title}
-                </h3>
-              </div>
-              <p className="text-terminal-text/60">
-                {skillTree[activeCategory].description}
-              </p>
-            </div>
-
-            {/* Skills List */}
-            <div className="grid md:grid-cols-2 gap-6">
-              {skillTree[activeCategory].skills.map((skill, idx) => (
-                <motion.div
-                  key={skill.name}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.05 }}
-                  className="bg-terminal-bg/60 border border-terminal-accent/10 rounded-lg p-4 hover:border-terminal-accent/30 transition-all"
-                >
-                  {/* Skill Name and Level */}
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <h4 className="text-lg font-medium text-terminal-text mb-1">
-                        {skill.name}
-                      </h4>
-                      <span className={`text-sm font-medium ${getLevelColor(skill.level)}`}>
-                        {skill.level}
-                      </span>
-                    </div>
-                    {/* Level Indicator */}
-                    <div className="flex gap-1">
-                      {[...Array(5)].map((_, i) => (
-                        <div
-                          key={i}
-                          className={`w-2 h-8 rounded ${
-                            i < getLevelBars(skill.level)
-                              ? 'bg-terminal-accent'
-                              : 'bg-terminal-accent/10'
-                          }`}
-                        />
-                      ))}
-                    </div>
+        {/* Certifications */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.8 }}
+          className="bg-terminal-bg/40 border border-terminal-accent/20 p-6"
+        >
+          <h3 className="font-bold text-terminal-text mb-4">
+            🏆 Certifications & Achievements
+          </h3>
+          <div className="space-y-4">
+            {certifications.map((cert, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, x: -20 }}
+                animate={inView ? { opacity: 1, x: 0 } : {}}
+                transition={{ delay: 1 + idx * 0.1 }}
+                className="flex items-start gap-4 p-4 bg-terminal-bg/60 border border-terminal-accent/10 hover:border-terminal-accent/30 transition-all"
+              >
+                <div className="text-terminal-accent text-2xl">✓</div>
+                <div className="flex-1">
+                  <h4 className="text-terminal-text font-semibold mb-1">{cert.name}</h4>
+                  <div className="flex items-center gap-2 text-sm text-terminal-text/60">
+                    <span>{cert.issuer}</span>
+                    <span>•</span>
+                    <span>{cert.year}</span>
                   </div>
-
-                  {/* Stats */}
-                  <div className="flex gap-6 text-sm text-terminal-text/60">
-                    <div>
-                      <span className="text-terminal-accent">{skill.years}</span> years
-                    </div>
-                    <div>
-                      <span className="text-terminal-secondary">{skill.projects}</span> projects
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Additional Tools & Workflow */}
-          <div className="mt-12 grid md:grid-cols-2 gap-6">
-            {/* Tools */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="bg-terminal-bg/40 border border-terminal-accent/20 rounded-lg p-6"
-            >
-              <h4 className="text-xl font-bold text-terminal-text mb-4 flex items-center gap-2">
-                <span className="text-terminal-accent">$</span> Tools & Platforms
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {['Git', 'GitHub', 'VS Code', 'Linux', 'Docker', 'VPS', 'Kaggle', 
-                  'Colab', 'Postman', 'Figma', 'Notion'].map(tool => (
-                  <span 
-                    key={tool}
-                    className="px-3 py-1 bg-terminal-accent/10 text-terminal-accent text-sm rounded border border-terminal-accent/30"
-                  >
-                    {tool}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Currently Learning */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="bg-terminal-bg/40 border border-terminal-secondary/20 rounded-lg p-6"
-            >
-              <h4 className="text-xl font-bold text-terminal-text mb-4 flex items-center gap-2">
-                <span className="text-terminal-secondary">⟳</span> Currently Exploring
-              </h4>
-              <ul className="space-y-2 text-terminal-text/70">
-                {[
-                  'zk-SNARKs for privacy-preserving systems',
-                  'Rust for systems programming',
-                  'Advanced system architecture patterns',
-                  'WebAssembly for performance-critical apps'
-                ].map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <span className="text-terminal-secondary mt-1">▹</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </motion.div>
       </div>
