@@ -94,7 +94,7 @@ const Skills = () => {
 
   const certifications = [
     {
-      name: 'English Score 412 - B2 Proficiency',
+      name: 'English Score 416 - B2 Upper Intermediate',
       issuer: 'British Council',
       year: '2025'
     },
