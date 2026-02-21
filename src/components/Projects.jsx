@@ -164,6 +164,69 @@ app.get('/api/users/:id/orders', async (req, res) => {
       github: null,
       demo: null
     },
+    {
+      id: 'finance-tracker',
+      name: 'Finance Tracker',
+      category: 'fullstack',
+      description: 'Personal finance management app with expense tracking, budgeting, and OTP-based authentication.',
+      detailedDescription: 'Built a full-stack personal finance tracker with a Go (Gin) backend and React frontend. Implemented JWT-based authentication with OTP email verification via Resend API, RESTful API architecture, and PostgreSQL database hosted on Railway. The frontend is deployed on Vercel with proper SPA routing, while the backend runs in a containerized Railway environment with automated deployments from GitHub.',
+      tech: ['Go', 'Gin', 'PostgreSQL', 'React', 'TypeScript', 'TailwindCSS', 'Railway', 'Vercel', 'Resend API', 'JWT'],
+      year: '2026',
+      status: 'production',
+      size: 'medium',
+      features: [
+        'JWT authentication with OTP email verification',
+        'RESTful API with Gin framework following best practices',
+        'PostgreSQL database with GORM/raw query optimization',
+        'CORS configuration for cross-origin frontend-backend communication',
+        'Resend API integration replacing SMTP for cloud-compatible email delivery',
+        'SPA routing on Vercel with vercel.json rewrite rules',
+        'Environment-based configuration for dev and production'
+      ],
+      challenges: [
+        {
+          challenge: 'SMTP Blocked on Railway',
+          solution: 'Replaced Gmail SMTP with Resend HTTP API, eliminating port 587 i/o timeout errors on Railway cloud environment'
+        },
+        {
+          challenge: 'SPA 404 on Page Refresh',
+          solution: 'Added vercel.json rewrite rule to redirect all routes to index.html, enabling client-side routing on Vercel'
+        },
+        {
+          challenge: 'CORS on Production',
+          solution: 'Configured Gin CORS middleware with explicit allowed origins, headers, and methods for secure cross-domain requests'
+        }
+      ],
+      codeSnippet: `// OTP-based registration with Resend email delivery
+    func (s *authService) Register(req dto.RegisterRequest) error {
+      // Check existing user
+      _, err := s.userRepo.FindByEmail(req.Email)
+      if err == nil {
+        return errors.New("email already registered")
+      }
+
+      // Hash password & save user
+      hashed, _ := bcrypt.GenerateFromPassword([]byte(req.Password), 12)
+      user := &model.User{
+        Name:     req.Name,
+        Email:    req.Email,
+        Password: string(hashed),
+      }
+      s.userRepo.Create(user)
+
+      // Send OTP via Resend API
+      return s.sendOTP(req.Name, req.Email)
+    }`,
+      stats: [
+        { label: 'API Endpoints', value: '10+' },
+        { label: 'Auth Method', value: 'OTP + JWT' },
+        { label: 'Deploy Time', value: '< 2min' },
+        { label: 'Uptime', value: '99.9%' }
+      ],
+      github: 'https://github.com/myfarism/finance-tracker',
+      demo: null
+  },
+
 //     {
 //       id: 'learning-platform',
 //       name: 'Learning Management System',
