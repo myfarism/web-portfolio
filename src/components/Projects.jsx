@@ -226,6 +226,81 @@ app.get('/api/users/:id/orders', async (req, res) => {
       github: 'https://github.com/myfarism/finance-tracker',
       demo: null
   },
+  {
+    id: 'tanyalangit',
+    name: 'TanyaLangit',
+    category: 'fullstack',
+    description: 'Hyperlocal crowdsourced weather reporting app — real-time weather conditions reported by people actually at the location.',
+    detailedDescription: 'Built a full-stack hyperlocal weather app where users anonymously report and request real-time weather conditions at specific map locations. The Go (Fiber) backend handles WebSocket broadcasting to nearby clients, geospatial queries via PostGIS, rate limiting, and a background cleanup job for expired reports. The Next.js frontend features an interactive Leaflet map, confidence-based clustering, animated markers, rain overlay effects, a shareable "Request Info" link optimized for WhatsApp sharing, and a warm local-themed UI with dark mode support.',
+    tech: ['Go', 'Fiber', 'PostgreSQL', 'PostGIS', 'WebSocket', 'Next.js', 'TypeScript', 'React Leaflet', 'TailwindCSS', 'Framer Motion', 'Railway', 'Vercel'],
+    year: '2026',
+    status: 'production',
+    size: 'large',
+    features: [
+      'Anonymous real-time weather reporting with 30-minute TTL per report',
+      'WebSocket broadcast — new reports pushed only to clients within a configurable radius',
+      'Geospatial clustering with confidence scoring based on report count and on-site status',
+      'PostGIS-powered ST_DWithin radius queries with GIST index for performance',
+      'Location request feature with shareable WhatsApp-optimized link',
+      'Animated markers (pop, ripple, float) and rain overlay effect via Framer Motion',
+      'IP-based rate limiting and coordinate validation (bounded to Indonesia)',
+      'Background cleanup job for expired reports and requests',
+      'Warm local-themed UI (Plus Jakarta Sans, earth tone palette) with dark mode'
+    ],
+    challenges: [
+      {
+        challenge: 'Crowdsourced data trust and accuracy',
+        solution: 'Implemented proximity-based clustering (500m radius) with confidence scoring — markers scale with report count, on-site reporters get visual priority, and reports auto-expire after 30 minutes to keep data fresh'
+      },
+      {
+        challenge: 'WebSocket selective broadcast at scale',
+        solution: 'Built a custom Hub with RWMutex-protected client registry, broadcasting new reports only to WebSocket clients within a radius using Haversine distance calculation — avoiding global broadcast overhead'
+      },
+      {
+        challenge: 'PostGIS not available on standard cloud PostgreSQL',
+        solution: 'Migrated database to Supabase which ships with PostGIS pre-enabled, while keeping the Go backend on Railway — decoupling compute and storage for flexibility'
+      },
+      {
+        challenge: 'Share link UX for non-technical users',
+        solution: 'Designed a deep-link flow: POST /api/requests returns an ID, frontend generates /?request={id}, and recipients who open the link are auto-focused to the relevant map area with the report form pre-opened'
+      }
+    ],
+    codeSnippet: `// Geospatial query — fetch active reports within radius using PostGIS
+func GetNearbyReports(c *fiber.Ctx) error {
+  lat    := c.QueryFloat("lat", 0)
+  lng    := c.QueryFloat("lng", 0)
+  radius := c.QueryFloat("radius", 5)
+
+  if radius > 20 { radius = 20 }
+
+  reports := []models.Report{}
+  err := config.DB.Select(&reports, \`
+    SELECT id, condition, lat, lng, is_onsite, created_at, expires_at
+    FROM reports
+    WHERE expires_at > NOW()
+      AND ST_DWithin(
+          location,
+          ST_SetSRID(ST_MakePoint($2, $1), 4326)::geography,
+          $3 * 1000
+      )
+    ORDER BY created_at DESC
+    LIMIT 200
+  \`, lat, lng, radius)
+
+  if err != nil {
+    return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+  }
+  return c.JSON(reports)
+}`,
+    stats: [
+      { label: 'API Endpoints', value: '6' },
+      { label: 'Report TTL', value: '30 min' },
+      { label: 'Broadcast Type', value: 'Geo-selective' },
+      { label: 'DB Extension', value: 'PostGIS' }
+    ],
+    github: 'https://github.com/myfarism/tanyalangit',
+    demo: 'https://tanyalangit.vercel.app'
+  },
 
 //     {
 //       id: 'learning-platform',
