@@ -165,6 +165,134 @@ app.get('/api/users/:id/orders', async (req, res) => {
       demo: null
     },
     {
+      id: 'tanyalangit',
+      name: 'TanyaLangit',
+      category: 'fullstack',
+      description: 'Hyperlocal crowdsourced weather reporting app — real-time weather conditions reported by people actually at the location.',
+      detailedDescription: 'Built a full-stack hyperlocal weather app where users anonymously report and request real-time weather conditions at specific map locations. The Go (Fiber) backend handles WebSocket broadcasting to nearby clients, geospatial queries via PostGIS, rate limiting, and a background cleanup job for expired reports. The Next.js frontend features an interactive Leaflet map, confidence-based clustering, animated markers, rain overlay effects, a shareable "Request Info" link optimized for WhatsApp sharing, and a warm local-themed UI with dark mode support.',
+      tech: ['Go', 'Fiber', 'PostgreSQL', 'PostGIS', 'WebSocket', 'Next.js', 'TypeScript', 'React Leaflet', 'TailwindCSS', 'Framer Motion', 'Railway', 'Vercel'],
+      year: '2026',
+      status: 'production',
+      size: 'large',
+      features: [
+        'Anonymous real-time weather reporting with 30-minute TTL per report',
+        'WebSocket broadcast — new reports pushed only to clients within a configurable radius',
+        'Geospatial clustering with confidence scoring based on report count and on-site status',
+        'PostGIS-powered ST_DWithin radius queries with GIST index for performance',
+        'Location request feature with shareable WhatsApp-optimized link',
+        'Animated markers (pop, ripple, float) and rain overlay effect via Framer Motion',
+        'IP-based rate limiting and coordinate validation (bounded to Indonesia)',
+        'Background cleanup job for expired reports and requests',
+        'Warm local-themed UI (Plus Jakarta Sans, earth tone palette) with dark mode'
+      ],
+      challenges: [
+        {
+          challenge: 'Crowdsourced data trust and accuracy',
+          solution: 'Implemented proximity-based clustering (500m radius) with confidence scoring — markers scale with report count, on-site reporters get visual priority, and reports auto-expire after 30 minutes to keep data fresh'
+        },
+        {
+          challenge: 'WebSocket selective broadcast at scale',
+          solution: 'Built a custom Hub with RWMutex-protected client registry, broadcasting new reports only to WebSocket clients within a radius using Haversine distance calculation — avoiding global broadcast overhead'
+        },
+        {
+          challenge: 'PostGIS not available on standard cloud PostgreSQL',
+          solution: 'Migrated database to Supabase which ships with PostGIS pre-enabled, while keeping the Go backend on Railway — decoupling compute and storage for flexibility'
+        },
+        {
+          challenge: 'Share link UX for non-technical users',
+          solution: 'Designed a deep-link flow: POST /api/requests returns an ID, frontend generates /?request={id}, and recipients who open the link are auto-focused to the relevant map area with the report form pre-opened'
+        }
+      ],
+      codeSnippet: `// Geospatial query — fetch active reports within radius using PostGIS
+  func GetNearbyReports(c *fiber.Ctx) error {
+    lat    := c.QueryFloat("lat", 0)
+    lng    := c.QueryFloat("lng", 0)
+    radius := c.QueryFloat("radius", 5)
+
+    if radius > 20 { radius = 20 }
+
+    reports := []models.Report{}
+    err := config.DB.Select(&reports, \`
+      SELECT id, condition, lat, lng, is_onsite, created_at, expires_at
+      FROM reports
+      WHERE expires_at > NOW()
+        AND ST_DWithin(
+            location,
+            ST_SetSRID(ST_MakePoint($2, $1), 4326)::geography,
+            $3 * 1000
+        )
+      ORDER BY created_at DESC
+      LIMIT 200
+    \`, lat, lng, radius)
+
+    if err != nil {
+      return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+    }
+    return c.JSON(reports)
+  }`,
+      stats: [
+        { label: 'API Endpoints', value: '6' },
+        { label: 'Report TTL', value: '30 min' },
+        { label: 'Broadcast Type', value: 'Geo-selective' },
+        { label: 'DB Extension', value: 'PostGIS' }
+      ],
+      github: 'https://github.com/myfarism/tanyalangit',
+      demo: 'https://tanyalangit.vercel.app'
+    },
+    {
+      "id": "lamarr",
+      "name": "Lamarr",
+      "category": "fullstack",
+      "description": "AI-powered job application tracker — parse job postings, calculate CV match scores, generate follow-up emails, and track your entire job search in a responsive Kanban board.",
+      "detailedDescription": "Built a full-stack job application tracker with AI intelligence. The Go backend handles scraping job URLs with Colly, AI parsing via Groq (llama-3.3-70b), semantic CV matching with HuggingFace embeddings (pgvector), Asynq-powered deadline/follow-up reminders, and Firebase Auth. The Next.js frontend features a responsive Kanban board (desktop + mobile accordion), bulk actions, smart analytics with Recharts, notification bell, and a dark/light theme toggle. Every feature is production-ready with error boundaries, skeleton loaders, and proper TypeScript types.",
+      "tech": [
+        "Go", "Gin", "GORM", "PostgreSQL", "pgvector", "Asynq", "Redis", 
+        "Next.js 15", "TypeScript", "TailwindCSS", "Shadcn/ui", 
+        "Firebase Auth", "Groq API", "HuggingFace", "Railway", "Vercel"
+      ],
+      "year": "2026",
+      "status": "production",
+      "size": "large",
+      "features": [
+        "Responsive Kanban board dengan drag & drop (desktop) + accordion list (mobile)",
+        "AI Job Parser — paste job URL, Colly scrape + Groq ekstrak structured data otomatis",
+        "CV Match Score — semantic similarity menggunakan sentence-transformers + cosine similarity",
+        "Gap Analyzer — Groq analisis kekuatan, kekurangan, dan peluang lolos realistis",
+        "Follow-up Email Generator — draft kontekstual berdasarkan posisi dan hari sejak melamar",
+        "Deadline & Follow-up Reminders — Asynq scheduler + notification bell dengan unread count",
+        "Bulk actions — select multiple jobs untuk mass move/delete",
+        "Smart Analytics — response rate, avg reply time, platform breakdown, ghosted graveyard",
+        "Production-ready — error boundaries, skeleton loaders, empty states, dark/light mode"
+      ],
+      "challenges": [
+        {
+          "challenge": "Firebase Auth dengan email verification yang seamless",
+          "solution": "Custom flow: register → auto-sign-out → verify screen → RouteGuard block unverified users → toast dengan link langsung ke settings untuk CV upload"
+        },
+        {
+          "challenge": "Kanban board responsive yang benar di mobile tanpa horizontal scroll",
+          "solution": "Desktop: fixed-height flex container dengan per-kolom scroll. Mobile: accordion list per status dengan sticky header. DnD kit tetap jalan di desktop."
+        },
+        {
+          "challenge": "AI parsing yang robust terhadap HTML noisy dari job sites berbeda",
+          "solution": "Colly scraping + Groq LLM parsing dengan structured JSON output. Retry logic untuk HuggingFace model cold start + dual format response handler."
+        },
+        {
+          "challenge": "Monorepo deployment — Go backend + Next.js frontend",
+          "solution": "Railway untuk Go (nixpacks + custom Procfile), Vercel untuk Next.js (root directory apps/web). Firebase credentials via base64 env var, CORS production-ready."
+        }
+      ],
+      "codeSnippet": "// AI Job Parser — Colly scrape + Groq structured extraction\nconst ScrapeJob = async (url: string) => {\n  // Colly scraping\n  const scraped = await scrapeJob(url)\n  \n  // Groq LLM parsing dengan exact JSON schema\n  const prompt = `Parse dengan format JSON ini:\n  {\n    \"title\": \"job title\",\n    \"company\": \"company name\",\n    \"description\": \"summary (max 500 chars)\",\n    \"requirements\": \"comma-separated list\",\n    \"salary_min\": number or null,\n    \"salary_max\": number or null\n  }`\n  \n  const response = await groq.chat(prompt, scraped.description)\n  \n  // Robust JSON parsing dengan markdown cleanup\n  let cleaned = response.replace(/```(?:json)?/g, '').trim()\n  const parsed = JSON.parse(cleaned)\n  \n  return { ...scraped, ...parsed }\n}\n\n// Embedding CV match score\nconst matchScore = async (cvText: string, requirements: string) => {\n  const cvEmbedding = await hf.embed(cvText)\n  const jdEmbedding = await hf.embed(requirements)\n  \n  return cosineSimilarity(cvEmbedding, jdEmbedding)\n}",
+      "stats": [
+        { "label": "API Endpoints", "value": "22" },
+        { "label": "AI Models", "value": "2 (Groq + HuggingFace)" },
+        { "label": "Kanban Columns", "value": "6" },
+        { "label": "Bulk Actions", "value": "6" }
+      ],
+      "github": "https://github.com/myfarism/lamarr",
+      "demo": "https://lamarr.vercel.app"
+    },
+    {
       id: 'finance-tracker',
       name: 'Finance Tracker',
       category: 'fullstack',
@@ -225,135 +353,7 @@ app.get('/api/users/:id/orders', async (req, res) => {
       ],
       github: 'https://github.com/myfarism/finance-tracker',
       demo: null
-  },
-  {
-    id: 'tanyalangit',
-    name: 'TanyaLangit',
-    category: 'fullstack',
-    description: 'Hyperlocal crowdsourced weather reporting app — real-time weather conditions reported by people actually at the location.',
-    detailedDescription: 'Built a full-stack hyperlocal weather app where users anonymously report and request real-time weather conditions at specific map locations. The Go (Fiber) backend handles WebSocket broadcasting to nearby clients, geospatial queries via PostGIS, rate limiting, and a background cleanup job for expired reports. The Next.js frontend features an interactive Leaflet map, confidence-based clustering, animated markers, rain overlay effects, a shareable "Request Info" link optimized for WhatsApp sharing, and a warm local-themed UI with dark mode support.',
-    tech: ['Go', 'Fiber', 'PostgreSQL', 'PostGIS', 'WebSocket', 'Next.js', 'TypeScript', 'React Leaflet', 'TailwindCSS', 'Framer Motion', 'Railway', 'Vercel'],
-    year: '2026',
-    status: 'production',
-    size: 'large',
-    features: [
-      'Anonymous real-time weather reporting with 30-minute TTL per report',
-      'WebSocket broadcast — new reports pushed only to clients within a configurable radius',
-      'Geospatial clustering with confidence scoring based on report count and on-site status',
-      'PostGIS-powered ST_DWithin radius queries with GIST index for performance',
-      'Location request feature with shareable WhatsApp-optimized link',
-      'Animated markers (pop, ripple, float) and rain overlay effect via Framer Motion',
-      'IP-based rate limiting and coordinate validation (bounded to Indonesia)',
-      'Background cleanup job for expired reports and requests',
-      'Warm local-themed UI (Plus Jakarta Sans, earth tone palette) with dark mode'
-    ],
-    challenges: [
-      {
-        challenge: 'Crowdsourced data trust and accuracy',
-        solution: 'Implemented proximity-based clustering (500m radius) with confidence scoring — markers scale with report count, on-site reporters get visual priority, and reports auto-expire after 30 minutes to keep data fresh'
-      },
-      {
-        challenge: 'WebSocket selective broadcast at scale',
-        solution: 'Built a custom Hub with RWMutex-protected client registry, broadcasting new reports only to WebSocket clients within a radius using Haversine distance calculation — avoiding global broadcast overhead'
-      },
-      {
-        challenge: 'PostGIS not available on standard cloud PostgreSQL',
-        solution: 'Migrated database to Supabase which ships with PostGIS pre-enabled, while keeping the Go backend on Railway — decoupling compute and storage for flexibility'
-      },
-      {
-        challenge: 'Share link UX for non-technical users',
-        solution: 'Designed a deep-link flow: POST /api/requests returns an ID, frontend generates /?request={id}, and recipients who open the link are auto-focused to the relevant map area with the report form pre-opened'
-      }
-    ],
-    codeSnippet: `// Geospatial query — fetch active reports within radius using PostGIS
-func GetNearbyReports(c *fiber.Ctx) error {
-  lat    := c.QueryFloat("lat", 0)
-  lng    := c.QueryFloat("lng", 0)
-  radius := c.QueryFloat("radius", 5)
-
-  if radius > 20 { radius = 20 }
-
-  reports := []models.Report{}
-  err := config.DB.Select(&reports, \`
-    SELECT id, condition, lat, lng, is_onsite, created_at, expires_at
-    FROM reports
-    WHERE expires_at > NOW()
-      AND ST_DWithin(
-          location,
-          ST_SetSRID(ST_MakePoint($2, $1), 4326)::geography,
-          $3 * 1000
-      )
-    ORDER BY created_at DESC
-    LIMIT 200
-  \`, lat, lng, radius)
-
-  if err != nil {
-    return c.Status(500).JSON(fiber.Map{"error": err.Error()})
-  }
-  return c.JSON(reports)
-}`,
-    stats: [
-      { label: 'API Endpoints', value: '6' },
-      { label: 'Report TTL', value: '30 min' },
-      { label: 'Broadcast Type', value: 'Geo-selective' },
-      { label: 'DB Extension', value: 'PostGIS' }
-    ],
-    github: 'https://github.com/myfarism/tanyalangit',
-    demo: 'https://tanyalangit.vercel.app'
-  },
-  {
-    "id": "lamarr",
-    "name": "Lamarr",
-    "category": "fullstack",
-    "description": "AI-powered job application tracker — parse job postings, calculate CV match scores, generate follow-up emails, and track your entire job search in a responsive Kanban board.",
-    "detailedDescription": "Built a full-stack job application tracker with AI intelligence. The Go backend handles scraping job URLs with Colly, AI parsing via Groq (llama-3.3-70b), semantic CV matching with HuggingFace embeddings (pgvector), Asynq-powered deadline/follow-up reminders, and Firebase Auth. The Next.js frontend features a responsive Kanban board (desktop + mobile accordion), bulk actions, smart analytics with Recharts, notification bell, and a dark/light theme toggle. Every feature is production-ready with error boundaries, skeleton loaders, and proper TypeScript types.",
-    "tech": [
-      "Go", "Gin", "GORM", "PostgreSQL", "pgvector", "Asynq", "Redis", 
-      "Next.js 15", "TypeScript", "TailwindCSS", "Shadcn/ui", 
-      "Firebase Auth", "Groq API", "HuggingFace", "Railway", "Vercel"
-    ],
-    "year": "2026",
-    "status": "production",
-    "size": "large",
-    "features": [
-      "Responsive Kanban board dengan drag & drop (desktop) + accordion list (mobile)",
-      "AI Job Parser — paste job URL, Colly scrape + Groq ekstrak structured data otomatis",
-      "CV Match Score — semantic similarity menggunakan sentence-transformers + cosine similarity",
-      "Gap Analyzer — Groq analisis kekuatan, kekurangan, dan peluang lolos realistis",
-      "Follow-up Email Generator — draft kontekstual berdasarkan posisi dan hari sejak melamar",
-      "Deadline & Follow-up Reminders — Asynq scheduler + notification bell dengan unread count",
-      "Bulk actions — select multiple jobs untuk mass move/delete",
-      "Smart Analytics — response rate, avg reply time, platform breakdown, ghosted graveyard",
-      "Production-ready — error boundaries, skeleton loaders, empty states, dark/light mode"
-    ],
-    "challenges": [
-      {
-        "challenge": "Firebase Auth dengan email verification yang seamless",
-        "solution": "Custom flow: register → auto-sign-out → verify screen → RouteGuard block unverified users → toast dengan link langsung ke settings untuk CV upload"
-      },
-      {
-        "challenge": "Kanban board responsive yang benar di mobile tanpa horizontal scroll",
-        "solution": "Desktop: fixed-height flex container dengan per-kolom scroll. Mobile: accordion list per status dengan sticky header. DnD kit tetap jalan di desktop."
-      },
-      {
-        "challenge": "AI parsing yang robust terhadap HTML noisy dari job sites berbeda",
-        "solution": "Colly scraping + Groq LLM parsing dengan structured JSON output. Retry logic untuk HuggingFace model cold start + dual format response handler."
-      },
-      {
-        "challenge": "Monorepo deployment — Go backend + Next.js frontend",
-        "solution": "Railway untuk Go (nixpacks + custom Procfile), Vercel untuk Next.js (root directory apps/web). Firebase credentials via base64 env var, CORS production-ready."
-      }
-    ],
-    "codeSnippet": "// AI Job Parser — Colly scrape + Groq structured extraction\nconst ScrapeJob = async (url: string) => {\n  // Colly scraping\n  const scraped = await scrapeJob(url)\n  \n  // Groq LLM parsing dengan exact JSON schema\n  const prompt = `Parse dengan format JSON ini:\n  {\n    \"title\": \"job title\",\n    \"company\": \"company name\",\n    \"description\": \"summary (max 500 chars)\",\n    \"requirements\": \"comma-separated list\",\n    \"salary_min\": number or null,\n    \"salary_max\": number or null\n  }`\n  \n  const response = await groq.chat(prompt, scraped.description)\n  \n  // Robust JSON parsing dengan markdown cleanup\n  let cleaned = response.replace(/```(?:json)?/g, '').trim()\n  const parsed = JSON.parse(cleaned)\n  \n  return { ...scraped, ...parsed }\n}\n\n// Embedding CV match score\nconst matchScore = async (cvText: string, requirements: string) => {\n  const cvEmbedding = await hf.embed(cvText)\n  const jdEmbedding = await hf.embed(requirements)\n  \n  return cosineSimilarity(cvEmbedding, jdEmbedding)\n}",
-    "stats": [
-      { "label": "API Endpoints", "value": "22" },
-      { "label": "AI Models", "value": "2 (Groq + HuggingFace)" },
-      { "label": "Kanban Columns", "value": "6" },
-      { "label": "Bulk Actions", "value": "6" }
-    ],
-    "github": "https://github.com/myfarism/lamarr",
-    "demo": "https://lamarr.vercel.app"
-  },
+    },
 
 
 //     {
