@@ -284,10 +284,9 @@ app.get('/api/users/:id/orders', async (req, res) => {
       ],
       "codeSnippet": "// AI Job Parser — Colly scrape + Groq structured extraction\nconst ScrapeJob = async (url: string) => {\n  // Colly scraping\n  const scraped = await scrapeJob(url)\n  \n  // Groq LLM parsing dengan exact JSON schema\n  const prompt = `Parse dengan format JSON ini:\n  {\n    \"title\": \"job title\",\n    \"company\": \"company name\",\n    \"description\": \"summary (max 500 chars)\",\n    \"requirements\": \"comma-separated list\",\n    \"salary_min\": number or null,\n    \"salary_max\": number or null\n  }`\n  \n  const response = await groq.chat(prompt, scraped.description)\n  \n  // Robust JSON parsing dengan markdown cleanup\n  let cleaned = response.replace(/```(?:json)?/g, '').trim()\n  const parsed = JSON.parse(cleaned)\n  \n  return { ...scraped, ...parsed }\n}\n\n// Embedding CV match score\nconst matchScore = async (cvText: string, requirements: string) => {\n  const cvEmbedding = await hf.embed(cvText)\n  const jdEmbedding = await hf.embed(requirements)\n  \n  return cosineSimilarity(cvEmbedding, jdEmbedding)\n}",
       "stats": [
-        { "label": "API Endpoints", "value": "22" },
+        { "label": "API Endpoints", "value": "12" },
         { "label": "AI Models", "value": "2 (Groq + HuggingFace)" },
-        { "label": "Kanban Columns", "value": "6" },
-        { "label": "Bulk Actions", "value": "6" }
+        { "label": "Kanban Columns", "value": "6" }
       ],
       "github": "https://github.com/myfarism/lamarr",
       "demo": "https://lamarr.vercel.app"
