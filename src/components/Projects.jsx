@@ -301,6 +301,60 @@ func GetNearbyReports(c *fiber.Ctx) error {
     github: 'https://github.com/myfarism/tanyalangit',
     demo: 'https://tanyalangit.vercel.app'
   },
+  {
+    "id": "lamarr",
+    "name": "Lamarr",
+    "category": "fullstack",
+    "description": "AI-powered job application tracker — parse job postings, calculate CV match scores, generate follow-up emails, and track your entire job search in a responsive Kanban board.",
+    "detailedDescription": "Built a full-stack job application tracker with AI intelligence. The Go backend handles scraping job URLs with Colly, AI parsing via Groq (llama-3.3-70b), semantic CV matching with HuggingFace embeddings (pgvector), Asynq-powered deadline/follow-up reminders, and Firebase Auth. The Next.js frontend features a responsive Kanban board (desktop + mobile accordion), bulk actions, smart analytics with Recharts, notification bell, and a dark/light theme toggle. Every feature is production-ready with error boundaries, skeleton loaders, and proper TypeScript types.",
+    "tech": [
+      "Go", "Gin", "GORM", "PostgreSQL", "pgvector", "Asynq", "Redis", 
+      "Next.js 15", "TypeScript", "TailwindCSS", "Shadcn/ui", 
+      "Firebase Auth", "Groq API", "HuggingFace", "Railway", "Vercel"
+    ],
+    "year": "2026",
+    "status": "production",
+    "size": "large",
+    "features": [
+      "Responsive Kanban board dengan drag & drop (desktop) + accordion list (mobile)",
+      "AI Job Parser — paste job URL, Colly scrape + Groq ekstrak structured data otomatis",
+      "CV Match Score — semantic similarity menggunakan sentence-transformers + cosine similarity",
+      "Gap Analyzer — Groq analisis kekuatan, kekurangan, dan peluang lolos realistis",
+      "Follow-up Email Generator — draft kontekstual berdasarkan posisi dan hari sejak melamar",
+      "Deadline & Follow-up Reminders — Asynq scheduler + notification bell dengan unread count",
+      "Bulk actions — select multiple jobs untuk mass move/delete",
+      "Smart Analytics — response rate, avg reply time, platform breakdown, ghosted graveyard",
+      "Production-ready — error boundaries, skeleton loaders, empty states, dark/light mode"
+    ],
+    "challenges": [
+      {
+        "challenge": "Firebase Auth dengan email verification yang seamless",
+        "solution": "Custom flow: register → auto-sign-out → verify screen → RouteGuard block unverified users → toast dengan link langsung ke settings untuk CV upload"
+      },
+      {
+        "challenge": "Kanban board responsive yang benar di mobile tanpa horizontal scroll",
+        "solution": "Desktop: fixed-height flex container dengan per-kolom scroll. Mobile: accordion list per status dengan sticky header. DnD kit tetap jalan di desktop."
+      },
+      {
+        "challenge": "AI parsing yang robust terhadap HTML noisy dari job sites berbeda",
+        "solution": "Colly scraping + Groq LLM parsing dengan structured JSON output. Retry logic untuk HuggingFace model cold start + dual format response handler."
+      },
+      {
+        "challenge": "Monorepo deployment — Go backend + Next.js frontend",
+        "solution": "Railway untuk Go (nixpacks + custom Procfile), Vercel untuk Next.js (root directory apps/web). Firebase credentials via base64 env var, CORS production-ready."
+      }
+    ],
+    "codeSnippet": "// AI Job Parser — Colly scrape + Groq structured extraction\nconst ScrapeJob = async (url: string) => {\n  // Colly scraping\n  const scraped = await scrapeJob(url)\n  \n  // Groq LLM parsing dengan exact JSON schema\n  const prompt = `Parse dengan format JSON ini:\n  {\n    \"title\": \"job title\",\n    \"company\": \"company name\",\n    \"description\": \"summary (max 500 chars)\",\n    \"requirements\": \"comma-separated list\",\n    \"salary_min\": number or null,\n    \"salary_max\": number or null\n  }`\n  \n  const response = await groq.chat(prompt, scraped.description)\n  \n  // Robust JSON parsing dengan markdown cleanup\n  let cleaned = response.replace(/```(?:json)?/g, '').trim()\n  const parsed = JSON.parse(cleaned)\n  \n  return { ...scraped, ...parsed }\n}\n\n// Embedding CV match score\nconst matchScore = async (cvText: string, requirements: string) => {\n  const cvEmbedding = await hf.embed(cvText)\n  const jdEmbedding = await hf.embed(requirements)\n  \n  return cosineSimilarity(cvEmbedding, jdEmbedding)\n}",
+    "stats": [
+      { "label": "API Endpoints", "value": "22" },
+      { "label": "AI Models", "value": "2 (Groq + HuggingFace)" },
+      { "label": "Kanban Columns", "value": "6" },
+      { "label": "Bulk Actions", "value": "6" }
+    ],
+    "github": "https://github.com/myfarism/lamarr",
+    "demo": "https://lamarr.vercel.app"
+  },
+
 
 //     {
 //       id: 'learning-platform',
